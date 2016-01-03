@@ -1,6 +1,8 @@
 package gamrcorps;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
@@ -34,10 +36,13 @@ public class Main {
             boolean massImport = false;
             boolean massMethod = false;
             boolean mainClass = false;
+            List<Character> openSeparators = new ArrayList<>();
             while (pointer < fileContents.length()) {
                 try {
                     switch (fileContents.charAt(pointer)) {
                         case '"':
+                            if (!isString) openSeparators.add('"');
+                            if (isString) openSeparators.remove(openSeparators.size()-1);
                             isString = !isString;
                             pointer++;
                             continue;
@@ -56,6 +61,7 @@ public class Main {
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "p(".length()), "p(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "System.out.print(", "p(".length());
                                 pointer += "System.out.print(".length() - "p(".length();
+                                openSeparators.add(')');
                             }
                             pointer++;
                             continue;
@@ -63,6 +69,7 @@ public class Main {
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "P(".length()), "P(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "System.out.println(", "P(".length());
                                 pointer += "System.out.println(".length() - "P(".length();
+                                openSeparators.add(')');
                             }
                             pointer++;
                             continue;
@@ -86,6 +93,7 @@ public class Main {
                             if (!isString && fileContents.charAt(pointer + 1) == '|' && fileContents.charAt(pointer + 2) != '|') {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "public static void main (String[] A) {", 2);
                                 pointer += "public static void main (String[] A) {".length() - 2;
+                                openSeparators.add('}');
                             }
                             pointer++;
                             continue;
@@ -104,6 +112,7 @@ public class Main {
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "f(".length()), "f(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "for(", "f(".length());
                                 pointer += "for(".length() - "f(".length();
+                                openSeparators.add(')');
                             }
                             pointer++;
                             continue;
@@ -115,6 +124,7 @@ public class Main {
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "i(".length()), "i(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "if(", "i(".length());
                                 pointer += "if(".length() - "i(".length();
+                                openSeparators.add(')');
                             }
                             pointer++;
                             continue;
@@ -136,6 +146,7 @@ public class Main {
                             if (!isString && fileContents.charAt(pointer + 1) == '|' && fileContents.charAt(pointer + 2) != '|') {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "try {", 2);
                                 pointer += "try {".length() - 2;
+                                openSeparators.add('}');
                             }
                             pointer++;
                             continue;
@@ -182,6 +193,18 @@ public class Main {
                             }
                             pointer++;
                             continue;
+                        case '}':
+                            openSeparators.remove(openSeparators.size()-1);
+                            pointer++;
+                        case ')':
+                            openSeparators.remove(openSeparators.size()-1);
+                            pointer++;
+                        case '[':
+                            openSeparators.add(']');
+                            pointer++;
+                        case ']':
+                            openSeparators.remove(openSeparators.size()-1);
+                            pointer++;
                         default:
                             if (isString) {
                                 pointer++;
@@ -197,6 +220,9 @@ public class Main {
                 } catch (StringIndexOutOfBoundsException e) {
                     pointer++;
                 }
+            }
+            for (int i = openSeparators.size()-1; i >= 0; i--) {
+                fileContents += String.valueOf(openSeparators.get(i));
             }
             if (!massImport && mainClass) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + fileContents;

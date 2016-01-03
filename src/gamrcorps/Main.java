@@ -12,6 +12,10 @@ public class Main {
         }
         String fileContents = null;
         try {
+            if (!Objects.equals(args[0].split("\\.")[args[0].split("\\.").length - 1], "jg")){
+                System.out.println("Wrong file extension!");
+                return;
+            }
             File file = new File(args[0]);
             FileInputStream fr = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];

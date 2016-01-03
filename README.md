@@ -1,5 +1,5 @@
-# Java-Golf (Current Version: 1.0.1)
-A Java dialect which is a golfing language
+# <s>Java-Golf</s> Glava (Current Version: 1.0.1)
+A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien for the new name.
 
 Download the zip, the compiler is in the `latest` folder.
 

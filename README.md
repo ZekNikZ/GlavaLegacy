@@ -29,3 +29,4 @@ Run the jar with `java -jar java-golf.jar C:\path\to\file.jg`. You can also add 
 ##Other Cool Features:
  - If you don't use the `z|` shorthand anywhere in your code, Java-Golf will automatically do it for you at the beginning of the file.
  - If you don't make a class, Java-Golf will automatically surround the entire code in a `Main` class to allow for running. See [here](http://codegolf.stackexchange.com/questions/55422/hello-world/68496#68496) for an example.
+ - You can omit the last `)`s, `}`s, and `]`s at the end of the program because Glava will automatically fill them in for you!

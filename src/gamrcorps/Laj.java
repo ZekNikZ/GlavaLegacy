@@ -1,4 +1,4 @@
-package src.gamrcorps;
+package gamrcorps;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

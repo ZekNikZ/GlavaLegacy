@@ -226,8 +226,8 @@ public class Main {
                     out.println(fileContents);
                     out.close();
                     try {
-                        Laj.runProcess("javac " + mainClassName + ".java");
-                        Laj.runProcess("java " + mainClassName);
+                        runProcess("javac " + mainClassName + ".java");
+                        runProcess("java " + mainClassName);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -244,5 +244,23 @@ public class Main {
 
     public static boolean isWhitespace(char c) {
         return c == ' ' || c == '\n' || c == '\t';
+    }
+
+    public static void printLines(String name, InputStream ins) throws Exception {
+        String line = null;
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(ins));
+        while ((line = in.readLine()) != null) {
+            //TODO: System.out.println(name + " " + line);
+            System.out.println(line);
+        }
+    }
+
+    public static void runProcess(String command) throws Exception {
+        Process pro = Runtime.getRuntime().exec(command);
+        printLines(command + " stdout:\n", pro.getInputStream());
+        printLines(command + " stderr:", pro.getErrorStream());
+        pro.waitFor();
+        //System.out.println(command + " exitValue() " + pro.exitValue());
     }
 }

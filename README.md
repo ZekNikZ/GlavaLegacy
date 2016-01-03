@@ -1,4 +1,4 @@
-# Java-Golf
+# Java-Golf (Current Version: 1.0.1)
 A Java dialect which is a golfing language
 
 Download the zip, the compiler is in the `latest` folder.

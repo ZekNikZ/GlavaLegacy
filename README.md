@@ -3,9 +3,9 @@ A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien 
 
 Download the zip, the compiler is in the `latest` folder.
 
-Run the jar with `java -jar java-golf.jar C:\path\to\file.jg`. You can also add the `-run` flag to run the java class immediately as well (`java -jar java-golf.jar C:\path\to\file.jg -run`).
+Run the jar with `java -jar glava.jar C:\path\to\file.jg`. You can also add the `-run` flag to run the java class immediately as well (`java -jar glava.jar C:\path\to\file.jg -run`).
 
-##Shorthands added by Java-Golf:
+##Shorthands added by Glava:
  - `b|` to `boolean `
  - `c|` to `class `
  - `C|` to `public class `

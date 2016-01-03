@@ -14,7 +14,7 @@ public class Main {
         }
         String fileContents = null;
         try {
-            if (!Objects.equals(args[0].split("\\.")[args[0].split("\\.").length - 1], "jg")){
+            if (!Objects.equals(args[0].split("\\.")[args[0].split("\\.").length - 1], "jg")) {
                 System.out.println("Wrong file extension!");
                 return;
             }
@@ -42,7 +42,7 @@ public class Main {
                     switch (fileContents.charAt(pointer)) {
                         case '"':
                             if (!isString) openSeparators.add('"');
-                            if (isString) openSeparators.remove(openSeparators.size()-1);
+                            if (isString) openSeparators.remove(openSeparators.size() - 1);
                             isString = !isString;
                             pointer++;
                             continue;
@@ -194,16 +194,16 @@ public class Main {
                             pointer++;
                             continue;
                         case '}':
-                            openSeparators.remove(openSeparators.size()-1);
+                            openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
                         case ')':
-                            openSeparators.remove(openSeparators.size()-1);
+                            openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
                         case '[':
                             openSeparators.add(']');
                             pointer++;
                         case ']':
-                            openSeparators.remove(openSeparators.size()-1);
+                            openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
                         default:
                             if (isString) {
@@ -221,7 +221,8 @@ public class Main {
                     pointer++;
                 }
             }
-            for (int i = openSeparators.size()-1; i >= 0; i--) {
+            for (int i = openSeparators.size() - 1; i >= 0; i--) {
+                if (openSeparators.get(i) == '}') fileContents += String.valueOf(';');
                 fileContents += String.valueOf(openSeparators.get(i));
             }
             if (!massImport && mainClass) {
@@ -231,6 +232,7 @@ public class Main {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n}";
             }
         }
+
         //TODO: System.out.println(fileContents);
         for (String arg : args) {
             switch (arg) {

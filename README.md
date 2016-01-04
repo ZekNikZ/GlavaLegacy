@@ -1,9 +1,9 @@
-#Glava (Current Version: 1.2)
+#Glava (Current Version: 1.3)
 A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien for the new name.
 
 Download the zip, the compiler is in the `latest` folder.
 
-Run the jar with `java -jar glava.jar C:\path\to\file.jg`. You can also add the `-run` flag to run the java class immediately as well (`java -jar glava.jar C:\path\to\file.jg -run`).
+Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
 
 ##Shorthands added by Glava:
  - `b|` to `boolean `
@@ -25,6 +25,8 @@ Run the jar with `java -jar glava.jar C:\path\to\file.jg`. You can also add the 
  - `t|` to `try {` (WIP)
  - `v|` to `void `
  - `z|` to import statements for commonly used classes (`java.util.*`, `java.lang.*`, `java.io.*`)
+ - `#` to `[]`
+ - `$` to `={` for array initialization
 
 ##Other Cool Features:
  - If you don't use the `z|` shorthand anywhere in your code, Glava will automatically do it for you at the beginning of the file.

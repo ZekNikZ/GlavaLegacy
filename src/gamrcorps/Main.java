@@ -60,7 +60,7 @@ public class Main {
                             }
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "p(".length()), "p(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "System.out.print(", "p(".length());
-                                pointer += "System.out.print(".length() - "p(".length();
+                                pointer += "System.out.print(".length() - "p(".length() + 1;
                                 openSeparators.add(')');
                             }
                             pointer++;
@@ -68,7 +68,7 @@ public class Main {
                         case 'P':
                             if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "P(".length()), "P(")) {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "System.out.println(", "P(".length());
-                                pointer += "System.out.println(".length() - "P(".length();
+                                pointer += "System.out.println(".length() - "P(".length() + 1;
                                 openSeparators.add(')');
                             }
                             pointer++;
@@ -194,17 +194,36 @@ public class Main {
                             pointer++;
                             continue;
                         case '}':
-                            openSeparators.remove(openSeparators.size() - 1);
+                            if (!isString) openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
+                            continue;
+                        case '(':
+                            if (!isString) openSeparators.add(')');
+                            pointer++;
+                            continue;
                         case ')':
-                            openSeparators.remove(openSeparators.size() - 1);
+                            if (!isString) openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
+                            continue;
                         case '[':
-                            openSeparators.add(']');
+                            if (!isString) openSeparators.add(']');
                             pointer++;
+                            continue;
                         case ']':
-                            openSeparators.remove(openSeparators.size() - 1);
+                            if (!isString) openSeparators.remove(openSeparators.size() - 1);
                             pointer++;
+                            continue;
+                        case '#':
+                            if (!isString) replaceChar(fileContents, pointer, "[]");
+                            pointer++;
+                            continue;
+                        case '$':
+                            if (!isString) {
+                                fileContents = insertStringAtPoint(fileContents, pointer, "={", 1);
+                                openSeparators.add('$');
+                            }
+                            pointer++;
+                            continue;
                         default:
                             if (isString) {
                                 pointer++;
@@ -214,7 +233,6 @@ public class Main {
                                 pointer++;
                                 continue;
                             }
-                            //TODO: System.out.println("Unrecognized character: " + fileContents.charAt(pointer));
                             pointer++;
                     }
                 } catch (StringIndexOutOfBoundsException e) {
@@ -223,7 +241,11 @@ public class Main {
             }
             for (int i = openSeparators.size() - 1; i >= 0; i--) {
                 if (openSeparators.get(i) == '}') fileContents += String.valueOf(';');
-                fileContents += String.valueOf(openSeparators.get(i));
+                if (openSeparators.get(i) == '$') {
+                    fileContents += String.valueOf('}');
+                } else {
+                    fileContents += String.valueOf(openSeparators.get(i));
+                }
             }
             if (!massImport && mainClass) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + fileContents;
@@ -232,42 +254,43 @@ public class Main {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n}";
             }
         }
-
-        //TODO: System.out.println(fileContents);
-        for (String arg : args) {
-            switch (arg) {
-                case "-run":
-                    if (new File(mainClassName + ".java").exists()) {
-                        new File(mainClassName + ".java").delete();
-                    }
-                    try {
-                        new File(mainClassName + ".java").createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    PrintWriter out = null;
-                    try {
-                        out = new PrintWriter(mainClassName + ".java");
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    out.println(fileContents);
-                    out.close();
-                    try {
-                        runProcess("javac " + mainClassName + ".java");
-                        runProcess("java " + mainClassName);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (new File(mainClassName + ".java").exists()) {
-                        new File(mainClassName + ".java").delete();
-                    }
-            }
+        if (new File(mainClassName + ".java").exists()) {
+            new File(mainClassName + ".java").delete();
+        }
+        try {
+            new File(mainClassName + ".java").createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(mainClassName + ".java");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        out.println(fileContents);
+        out.close();
+        String arguments = "";
+        for (int i = 1; i < args.length; i++) {
+            arguments += args[i] + " ";
+        }
+        try {
+            runProcess("javac " + mainClassName + ".java");
+            runProcess("java " + mainClassName + " "+ arguments);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (new File(mainClassName + ".java").exists()) {
+            new File(mainClassName + ".java").delete();
         }
     }
 
     public static String insertStringAtPoint(String str, int index, String toInsert, int removeAmount) {
         return str.substring(0, index) + toInsert + str.substring(index + removeAmount, str.length());
+    }
+
+    public static String replaceChar(String str, int index, String toInsert) {
+        return str.substring(0, index) + toInsert + str.substring(index + 1, str.length());
     }
 
     public static boolean isWhitespace(char c) {
@@ -289,6 +312,5 @@ public class Main {
         printLines(command + " stdout:\n", pro.getInputStream());
         printLines(command + " stderr:", pro.getErrorStream());
         pro.waitFor();
-        //System.out.println(command + " exitValue() " + pro.exitValue());
     }
 }

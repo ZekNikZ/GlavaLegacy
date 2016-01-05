@@ -34,7 +34,7 @@ public class Main {
             int pointer = 0;
             boolean isString = false;
             boolean massImport = false;
-            boolean massMethod = false;
+            boolean mainMethod = false;
             boolean mainClass = false;
             List<Character> openSeparators = new ArrayList<>();
             while (pointer < fileContents.length()) {
@@ -94,6 +94,7 @@ public class Main {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "public static void main (String[] A) {", 2);
                                 pointer += "public static void main (String[] A) {".length() - 2;
                                 openSeparators.add('}');
+                                mainMethod = true;
                             }
                             pointer++;
                             continue;
@@ -224,6 +225,18 @@ public class Main {
                             }
                             pointer++;
                             continue;
+                        case '\'':
+                            if (!isString) {
+                                fileContents = insertStringAtPoint(fileContents, pointer+2, "'", 0);
+                            }
+                            pointer++;
+                            continue;
+                        case '\n':
+                            if (isString) {
+                                fileContents = insertStringAtPoint(fileContents, pointer-1, "\\n", 2);
+                            }
+                            pointer++;
+                            continue;
                         default:
                             if (isString) {
                                 pointer++;
@@ -247,11 +260,12 @@ public class Main {
                     fileContents += String.valueOf(openSeparators.get(i));
                 }
             }
-            if (!massImport && mainClass) {
+            if (!massImport && mainClass && mainMethod) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + fileContents;
-            }
-            if (!massImport && !mainClass) {
+            } else if (!massImport && !mainClass && mainMethod) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n}";
+            } else if (!massImport && !mainClass && !mainMethod) {
+                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\npublic static void main (String[] A) {" + fileContents + "\n;}}";
             }
         }
         if (new File(mainClassName + ".java").exists()) {
@@ -275,13 +289,16 @@ public class Main {
             arguments += args[i] + " ";
         }
         try {
-            runProcess("javac " + mainClassName + ".java");
-            runProcess("java " + mainClassName + " "+ arguments);
+            runProcess("javac " + mainClassName + ".java", false);
+            runProcess("java " + mainClassName + " "+ arguments, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (new File(mainClassName + ".java").exists()) {
             new File(mainClassName + ".java").delete();
+        }
+        if (new File(mainClassName + ".class").exists()) {
+            new File(mainClassName + ".class").delete();
         }
     }
 
@@ -301,16 +318,16 @@ public class Main {
         String line = null;
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(ins));
+        System.out.println(name);
         while ((line = in.readLine()) != null) {
-            //TODO: System.out.println(name + " " + line);
-            System.out.println(line);
+            System.out.println("  " + line);
         }
     }
 
-    public static void runProcess(String command) throws Exception {
+    public static void runProcess(String command, boolean name) throws Exception {
         Process pro = Runtime.getRuntime().exec(command);
-        printLines(command + " stdout:\n", pro.getInputStream());
-        printLines(command + " stderr:", pro.getErrorStream());
+        printLines(name?command + "\n stdout:":"", pro.getInputStream());
+        printLines(name?command + "\n stderr:":"", pro.getErrorStream());
         pro.waitFor();
     }
 }

@@ -1,4 +1,4 @@
-#Glava (Current Version: 1.4)
+#Glava (Current Version: 1.5)
 A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien for the new name.
 
 Download the zip, the compiler is in the `latest` folder.
@@ -34,3 +34,4 @@ Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
  - If you don't make a main method (`m|`), Glava will automatically surround your code in one!
  - You can omit the last `"`, `)`s, `}`s, and `]`s at the end of the program because Glava will automatically fill them in for you!
  - Adding on to the previous feature, when the compiler has to add a `}` to your code, it automatically places a semicolon (`;`) before it.
+ - Multiline strings!

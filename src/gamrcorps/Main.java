@@ -41,9 +41,8 @@ public class Main {
                 try {
                     switch (fileContents.charAt(pointer)) {
                         case '"':
-                            if (!isString) openSeparators.add('"');
-                            if (isString) openSeparators.remove(openSeparators.size() - 1);
-                            isString = !isString;
+                            if (!isString){ openSeparators.add('"'); isString=true;}
+                            else if (isString && fileContents.charAt(pointer-1) != '\\'){ openSeparators.remove(openSeparators.size() - 1);isString = false;}
                             pointer++;
                             continue;
                         case 'I':
@@ -228,6 +227,7 @@ public class Main {
                         case '\'':
                             if (!isString) {
                                 fileContents = insertStringAtPoint(fileContents, pointer+2, "'", 0);
+                                pointer+=2;
                             }
                             pointer++;
                             continue;
@@ -263,7 +263,7 @@ public class Main {
             if (!massImport && mainClass && mainMethod) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + fileContents;
             } else if (!massImport && !mainClass && mainMethod) {
-                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n}";
+                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n;}";
             } else if (!massImport && !mainClass && !mainMethod) {
                 fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\npublic static void main (String[] A) {" + fileContents + "\n;}}";
             }

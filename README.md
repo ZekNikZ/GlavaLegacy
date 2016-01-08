@@ -1,4 +1,4 @@
-#Glava (Current Version: 1.5)
+#Glava (Current Version: 1.5.1)
 A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien for the new name.
 
 Download the zip, the compiler is in the `latest` folder.
@@ -11,6 +11,8 @@ Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
  - `C|` to `public class `
  - `d|` to `double `
  - `f|` to `float `
+ - `f(` to `for(`
+ - `F(` to `System.out.printf(`
  - `i|` to `int `
  - `I|` to `import `
  - `m|` to `public static void main (String[] A) {`

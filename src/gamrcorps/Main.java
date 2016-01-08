@@ -72,6 +72,14 @@ public class Main {
                             }
                             pointer++;
                             continue;
+                        case 'F':
+                            if (!isString && Objects.equals(fileContents.substring(pointer, pointer + "F(".length()), "F(")) {
+                                fileContents = insertStringAtPoint(fileContents, pointer, "System.out.printf(", "F(".length());
+                                pointer += "System.out.printf(".length() - "F(".length() + 1;
+                                openSeparators.add(')');
+                            }
+                            pointer++;
+                            continue;
                         case 'c':
                             if (!isString && fileContents.charAt(pointer + 1) == '|' && fileContents.charAt(pointer + 2) != '|') {
                                 fileContents = insertStringAtPoint(fileContents, pointer, "class ", 2);

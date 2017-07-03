@@ -32,7 +32,7 @@ Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
 
 ## Other Cool Features:
  - If you don't use the `z|` shorthand anywhere in your code, Glava will automatically do it for you at the beginning of the file.
- - If you don't make a class, Java-Golf will automatically surround the entire code in a `Main` class to allow for running. See [here](http://codegolf.stackexchange.com/questions/55422/hello-world/68496#68496) for an example.
+ - If you don't make a class, Glava will automatically surround the entire code in a `Main` class to allow for running. See [here](http://codegolf.stackexchange.com/questions/55422/hello-world/68496#68496) for an example.
  - If you don't make a main method (`m|`), Glava will automatically surround your code in one!
  - You can omit the last `"`, `)`s, `}`s, and `]`s at the end of the program because Glava will automatically fill them in for you!
  - Adding on to the previous feature, when the compiler has to add a `}` to your code, it automatically places a semicolon (`;`) before it.

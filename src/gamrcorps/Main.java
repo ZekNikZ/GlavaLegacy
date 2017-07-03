@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class Main {
 
+    private static final String commonImports = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\nimport java.awt.*;\nimport javax.swing.*;\nimport java.text.*;\nimport java.util.regex.*;\n";
+    private static final String variables = "    public static int m = 0;\n    public static int n = 0;\n    public static double d = 0d;\n    public static float f = 0f;\n    public static String s = \"\";\n    public static String t = \"\";\n    public static String u = \"abcdefghijklmnopqrstuvwxyz\";\n    public static String U = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\n    public static char c = 'A';\n    public static boolean T = true;\n    public static boolean F = false;\n";
     public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Missing File Argument");
@@ -188,8 +190,8 @@ public class Main {
                             continue;
                         case 'z':
                             if (!isString && fileContents.charAt(pointer + 1) == '|' && fileContents.charAt(pointer + 2) != '|') {
-                                fileContents = insertStringAtPoint(fileContents, pointer, "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n", 2);
-                                pointer += "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n".length() - 2;
+                                fileContents = insertStringAtPoint(fileContents, pointer, commonImports, 2);
+                                pointer += commonImports.length() - 2;
                                 massImport = true;
                             }
                             pointer++;
@@ -269,12 +271,13 @@ public class Main {
                 }
             }
             if (!massImport && mainClass && mainMethod) {
-                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + fileContents;
+                fileContents = commonImports + fileContents;
             } else if (!massImport && !mainClass && mainMethod) {
-                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\n" + fileContents + "\n;}";
+                fileContents = commonImports + "\npublic class " + mainClassName + " {\n" + variables + "\n" + fileContents + "\n;}";
             } else if (!massImport && !mainClass && !mainMethod) {
-                fileContents = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n" + "public class " + mainClassName + " {\npublic static void main (String[] A) {" + fileContents + "\n;}}";
+                fileContents = commonImports + "\npublic class " + mainClassName + " {\n" + variables + "\n    public static void main (String[] A) {\n        " + fileContents + ";\n    }\n}";
             }
+            System.out.println(fileContents);
         }
         if (new File(mainClassName + ".java").exists()) {
             new File(mainClassName + ".java").delete();

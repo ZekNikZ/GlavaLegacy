@@ -1,11 +1,11 @@
-#Glava (Current Version: 1.5.1)
+# Glava (Current Version: 1.6)
 A Java dialect which is a golfing language. Thanks to PPCG.SE user ConorO'Brien for the new name.
 
 Download the zip, the compiler is in the `latest` folder.
 
 Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
 
-##Shorthands added by Glava:
+## Shorthands added by Glava:
  - `b|` to `boolean `
  - `c|` to `class `
  - `C|` to `public class `
@@ -26,14 +26,36 @@ Run the jar with `java -jar glava.jar C:\path\to\file.jg`.
  - `s|` to `String `
  - `t|` to `try {` (WIP)
  - `v|` to `void `
- - `z|` to import statements for commonly used classes (`java.util.*`, `java.lang.*`, `java.io.*`)
+ - `z|` to import statements for commonly used classes (see below)
  - `#` to `[]`
  - `$` to `={` for array initialization
 
-##Other Cool Features:
+## Other Cool Features:
  - If you don't use the `z|` shorthand anywhere in your code, Glava will automatically do it for you at the beginning of the file.
  - If you don't make a class, Java-Golf will automatically surround the entire code in a `Main` class to allow for running. See [here](http://codegolf.stackexchange.com/questions/55422/hello-world/68496#68496) for an example.
  - If you don't make a main method (`m|`), Glava will automatically surround your code in one!
  - You can omit the last `"`, `)`s, `}`s, and `]`s at the end of the program because Glava will automatically fill them in for you!
  - Adding on to the previous feature, when the compiler has to add a `}` to your code, it automatically places a semicolon (`;`) before it.
  - Multiline strings!
+
+## Default Import Statements:
+ - `java.util.*`
+ - `java.lang.*`
+ - `java.io.*`
+ - `java.awt.*`
+ - `javax.swing.*`
+ - `java.text.*`
+ - `java.util.regex.*`
+
+## Pre-defined Variables:
+ - `int m = 0`
+ - `int n = 1`
+ - `double d = 0d`
+ - `float f = 0f`
+ - `String s = ""`
+ - `String t = ""`
+ - `String u = "abcdefghijklmnopqrstuvwxyz"`
+ - `String U = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"`
+ - `char c = 'A'`
+ - `boolean T = true`
+ - `boolean F = false`
